@@ -331,4 +331,40 @@ public class Controller implements Ads{
 
         return max.name();
     }
+
+    public String theMostListenCategory(int indexUser) {
+        Category max = Category.values()[0];
+        if (users.get(indexUser) instanceof Consumer) {
+            for (int i = 1; i < Category.values().length; i++) {
+                if (((Consumer) users.get(indexUser)).getTimePlayedByCategory().get(max).toSeconds() < ((Consumer) users.get(indexUser)).getTimePlayedByCategory().get(Category.values()[i]).toSeconds())
+                    max = Category.values()[i];
+            }
+            return max.name();
+        }
+        return "Invalid user";
+    }
+
+    public String theMostListenCategory() {
+        HashMap<Category,ChronologicalFormat> categories = new HashMap<>();
+        Category max = Category.values()[0];
+        for (int i = 0; i < Category.values().length; i++) {
+            categories.put(Category.values()[i],new ChronologicalFormat(0,0,0));
+        }
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i) instanceof Consumer) {
+                for (int j = 0; j < Category.values().length; j++) {
+                    if (((Consumer) users.get(i)).getTimePlayedByCategory().containsKey(Category.values()[j])) {
+                        ChronologicalFormat temp = ((Consumer) users.get(i)).getTimePlayedByCategory().get(Category.values()[j]);
+                        categories.get(Category.values()[j]).addTime(temp.getHour(), temp.getMinute(), temp.getSecond());
+                    }
+                }
+            }
+        }
+        for (int i = 1; i < Category.values().length; i++) {
+            if (categories.get(max).toSeconds() < categories.get(Category.values()[i]).toSeconds())
+                max = Category.values()[i];
+        }
+
+        return max.name();
+    }
 }
