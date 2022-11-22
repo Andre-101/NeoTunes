@@ -57,6 +57,114 @@ public class Manager {
         return true;
     }
 
+    private void editPlaylist() {
+        System.out.println("");
+    }
+
+    private void createPlaylist() {
+        System.out.println("Type nickname");
+        String nickName = sc.nextLine();
+        if (cl.searchUser(nickName) != null) {
+            if (cl.searchUser(nickName) instanceof Consumer) {
+                System.out.println("Type playlist title");
+                String title = sc.nextLine();
+                if (cl.createPlaylist(cl.searchUserPosition(nickName), title).equals("")) {
+                    System.out.println("Create successful");
+                }
+                else System.out.println(cl.createPlaylist(cl.searchUserPosition(nickName), title));
+            } else System.out.println("Invalid user, the user must be a consumer (Standard or Premium");
+        } else System.out.println("Didn't find the user");
+    }
+
+    private void registerAudioContent() {
+        String title, duration, album_description = null, pictureUrl;
+        int hour, minute, second, genre_category = 0;
+        double price = 0;
+        System.out.println("Type nickname");
+        String nickName = sc.nextLine();
+        if (cl.searchUser(nickName) != null) {
+            if (cl.searchUser(nickName) instanceof Producer) {
+                System.out.println("Type title");
+                title = sc.nextLine();
+                do {
+                    System.out.println("Type duration - Hours, Minutes, Seconds  (HH:MM:SS)\n  It will ask again if it does not comply with the format");
+                    duration = sc.nextLine();
+                } while (duration.split(":").length != 3);
+                hour = Integer.parseInt(duration.split(":")[0]);
+                minute = Integer.parseInt(duration.split(":")[1]);
+                second = Integer.parseInt(duration.split(":")[2]);
+                System.out.println("Type the representative image url");
+                pictureUrl = sc.nextLine();
+                if (cl.searchUser(nickName) instanceof Artist) {
+                    System.out.println("Type album");
+                    album_description = sc.nextLine();
+                    System.out.println("Type genre\n (1)Rock\n (2)Pop\n (3)Trap\n (4)House");
+                    genre_category = validateInput(1,4);
+                    System.out.println("Type price");
+                    price = sc.nextDouble();
+                    sc.nextLine();
+                }
+                if (cl.searchUser(nickName) instanceof ContentCreator) {
+                    System.out.println("Type description");
+                    album_description = sc.nextLine();
+                    System.out.println("Type category\n (1)Politics\n (2)Entertainment\n (3)Video games\n (4)Fashion");
+                    genre_category = validateInput(1,4);
+                }
+                if (cl.registerAudioContent(cl.searchUserPosition(nickName), title, hour, minute, second, album_description, genre_category, pictureUrl, price))
+                    System.out.println("Register successful");
+                else System.out.println("Error register");
+            } else System.out.println("Invalid user, the user must be a producer (Artist or Content Creator");
+        } else System.out.println("Didn't find the user");
+    }
+
+    private void registerUser() {
+        int typeUser;
+        String message;
+        String name = "";
+        String representativeUrl = "";
+        System.out.println("Type nickname");
+        String nickname = sc.nextLine();
+        System.out.println("Type id");
+        String id = sc.nextLine();
+        System.out.println(
+                "What kind of user would you like to be?\n"+
+                        "(1) Standard         --You can create playlist, add and buy songs but with restrictions--\n"+
+                        "(2) Premium          --You can create playlists, add and buy unlimited songs, you can also play your playlist without ads--\n"+
+                        "(3) Artist           --You can only add songs, but you can be famous and appear in our rankings--\n"+
+                        "(4) Content Creator  --You can only add a podcast, but you can talk about what you are most\n"+
+                        "                       passionate about and if you are very interesting you can appear in our ranking--"
+        );
+        typeUser = validateInput(1,4);
+        switch (typeUser) {
+            case 2:
+                boolean loop = true;
+                do {
+                    System.out.println(
+                            "Being a premium member costs $2.99\n"+
+                                    "(1) Continue with Standard account\n"+
+                                    "(2) Buy premium account access"
+                    );
+                    typeUser = validateInput(1, 2);
+                    if (typeUser == 2) {
+                        message = cl.buySimulate();
+                        if (message.equals("")) {
+                            loop = false;
+                            message = "Successful purchase";
+                        }
+                        System.out.println(message);
+                    } else loop = false;
+                } while (loop);
+                break;
+            case 3:
+            case 4:
+                System.out.println("Type name");
+                name = sc.nextLine();
+                System.out.println("Type representative image url");
+                representativeUrl = sc.nextLine();
+        }
+        cl.registerUser(nickname,id,name,representativeUrl,typeUser);
+    }
+
     /**
      * <b>Name:showMenu</b><br>
      * This method allows you to show the menu.

@@ -43,6 +43,20 @@ public class Controller implements Ads{
         return false;
     }
 
+    public User searchUser(String nickName) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getNickname().equalsIgnoreCase(nickName)) return users.get(i);
+        }
+        return null;
+    }
+
+    public int searchUserPosition(String nickname) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getNickname().equalsIgnoreCase(nickname)) return i;
+        }
+        return -1;
+    }
+
     /**
      * <b>Name:registerAudioContent</b><br>
      * This method allows you to register a user.
@@ -107,7 +121,7 @@ public class Controller implements Ads{
      */
     public String createPlaylist(int user, String playlistTitle) {
         if (users.get(user) instanceof Consumer) {
-            if (((Consumer) users.get(user)).create(playlistTitle)) return "Successful";
+            if (((Consumer) users.get(user)).create(playlistTitle)) return "";
             else return "You're not premium, you can't create more playlist";
         }
         return "Invalid user";
@@ -386,25 +400,31 @@ public class Controller implements Ads{
         if (users.get(user) instanceof Consumer) {
             if (searchAudioContent(title) != null) {
                 if (searchAudioContent(title) instanceof Song) {
-                    switch (rd.nextInt(5)) {
-                        case 0:
-                            return "The banking system shut down";
-                        case 1:
-                            return "Card declined, insufficient funds";
-                        case 2:
-                            return "Card rejected, bank blocks access";
-                        case 3:
-                            return "System error, payment cannot be made";
-                        case 4:
-                            if (((Consumer) users.get(user)).buy(((Song) searchAudioContent(title))))
-                                return "Successful purchase";
-                            else
-                                return "Purchase was successful but you cannot buy more songs, the purchase money will be returned to you.";
-                    }
+                    String message = buySimulate();
+                    if (message.equals("")) {
+                        if (((Consumer) users.get(user)).buy(((Song) searchAudioContent(title))))
+                            return "Successful purchase";
+                        else
+                            return "Purchase was successful but you cannot buy more songs, the purchase money will be returned to you.";
+                    } else return message;
                 } else return "Error, the title isn't a song";
             } else return "Don't found the song title";
         }
         return "Invalid user";
+    }
+
+    public String buySimulate() {
+        switch (rd.nextInt(5)) {
+            case 0:
+                return "The banking system shut down";
+            case 1:
+                return "Card declined, insufficient funds";
+            case 2:
+                return "Card rejected, bank blocks access";
+            case 3:
+                return "System error, payment cannot be made";
+        }
+        return "";
     }
 
      /**
@@ -582,7 +602,13 @@ public class Controller implements Ads{
         }
         return max.name();
     }
-
+    /**
+     * <b>Name:topFiveArtist</b><br>
+     * This method allows you to display topFiveArtist.
+     * <b>Pre:</b>The artists should previously exist<br>
+     * <b>Post:</b>topFiveArtist method was operated correctly<br>
+     * @return a String with topFiveArtist.
+     */
     public String topFiveArtist() {
         ArrayList<Producer> artists = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
@@ -591,7 +617,13 @@ public class Controller implements Ads{
         ArrayList<Producer> top = sortUsers(artists);
         return showTopProducers(top);
     }
-
+    /**
+     * <b>Name:topFiveContentCreators</b><br>
+     * This method allows you to display topFiveArtist.
+     * <b>Pre:</b>The artists should previously exist<br>
+     * <b>Post:</b>topFiveArtist method was operated correctly<br>
+     * @return a String with topFiveArtist.
+     */
     public String topFiveContentCreators() {
         ArrayList<Producer> contentCreators = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
