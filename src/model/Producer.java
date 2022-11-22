@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Producer extends User{
@@ -19,6 +20,17 @@ public abstract class Producer extends User{
         playbackTimeByAudioContent = new HashMap<>();
     }
 
+    public void updateCounter(AudioContent audioContent) {
+        if (playbackNumberByAudioContent.containsKey(audioContent)) {
+            playbackNumberByAudioContent.replace(audioContent, playbackNumberByAudioContent.get(audioContent),playbackNumberByAudioContent.get(audioContent)+1);
+            playbackTimeByAudioContent.get(audioContent).addTime(audioContent.getDuration().getHour(), audioContent.getDuration().getMinute(), audioContent.getDuration().getSecond());
+        } else {
+            playbackNumberByAudioContent.put(audioContent,1);
+            playbackTimeByAudioContent.put(audioContent,audioContent.getDuration());
+        }
+    }
+
+
     //Getters and Setters
 
     public HashMap<AudioContent, Integer> getPlaybackNumberByAudioContent() {
@@ -35,6 +47,15 @@ public abstract class Producer extends User{
 
     public void setPlaybackTimeByAudioContent(HashMap<AudioContent, ChronologicalFormat> playbackTimeByAudioContent) {
         this.playbackTimeByAudioContent = playbackTimeByAudioContent;
+    }
+
+    public int getTotalPlays() {
+        int counts = 0;
+        ArrayList<Integer> plays = (ArrayList<Integer>) playbackNumberByAudioContent.values();
+        for (int i = 0; i < plays.size(); i++) {
+            counts += plays.get(i);
+        }
+        return counts;
     }
 
     public String getName() {

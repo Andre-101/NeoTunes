@@ -41,6 +41,10 @@ public class Podcast extends AudioContent{
         this.podcastPictureURL = podcastPictureURL;
     }
 
+    public String getObject() {
+        return getTitle() + "    Category: " + category;
+    }
+
     @Override
     public String toString() {
         return "Song: " + getTitle() +

@@ -36,6 +36,20 @@ public class Artist extends Producer{
         return "The list songs:\n" + message;
     }
 
+    public AudioContent getTheMostListenedSong() {
+        AudioContent m = null;
+        for (int i = 0; i < songs.size(); i++) {
+            if (m == null) {
+                if (getPlaybackNumberByAudioContent().containsKey(songs.get(i))) m = songs.get(i);
+            } else {
+                if (getPlaybackNumberByAudioContent().containsKey(songs.get(i))) {
+                    if (getPlaybackNumberByAudioContent().get(m) < getPlaybackNumberByAudioContent().get(songs.get(i))) m = songs.get(i);
+                }
+            }
+        }
+        return m;
+    }
+
     //Getters and Setters
 
     public Song getSong(int index) {
@@ -54,4 +68,5 @@ public class Artist extends Producer{
     public void setSongs(ArrayList<Song> songs) {
         this.songs = songs;
     }
+
 }

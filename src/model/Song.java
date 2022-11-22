@@ -51,6 +51,10 @@ public class Song extends AudioContent{
         this.price = price;
     }
 
+    public String getObject() {
+        return getTitle() + "    Genre: " + genre;
+    }
+
     @Override
     public String toString() {
         return "Song: " + getTitle() +

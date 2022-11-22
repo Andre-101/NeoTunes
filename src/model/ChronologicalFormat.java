@@ -46,7 +46,12 @@ public class ChronologicalFormat {
             minute -= ((minute / 60) * 60);
         }
     }
-
+    /**
+     * <b>Name:toSeconds</b><br>
+     * This method allows you to change time to seconds.
+     * <b>Post:</b>toSeconds was operated correctly<br>
+     * @return an int with the time changed to seconds
+     */
     public int toSeconds() {
         return hour * 3600 + minute * 60 + second;
     }

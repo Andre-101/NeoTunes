@@ -38,6 +38,7 @@ public class Playlist implements Editable, Reproducible, Shareable{
         return "  Title: " + audioContentList.get(indexAudioContent).getTitle() +"\n"+
                 "  Duration:  " + audioContentList.get(indexAudioContent).getDuration().toString();
     }
+
     /**
      * <b>Name:showAudioContent</b><br>
      * This method allows you to play the audio content.
@@ -49,6 +50,7 @@ public class Playlist implements Editable, Reproducible, Shareable{
     public String showAudioContent(int indexAudioContent) {
         return audioContentList.get(indexAudioContent).toString();
     }
+
     /**
      * <b>Name:deleteUpdateLastContent</b><br>
      * This method allows you to delete the updated last content.

@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 public class Controller implements Ads{
@@ -16,6 +17,18 @@ public class Controller implements Ads{
         rd = new Random();
     }
 
+    /**
+     * <b>Name:registerUser</b><br>
+     * This method allows you to register a user.
+     * <b>Pre:</b>The user doesn't exist previously<br>
+     * <b>Post:</b>register method was operated correctly<br>
+     * @param nickname String. Variable containing the String you want to register. nickname != null
+     * @param id String. Variable that contains the id . id != null
+     * @param name String. Variable that contains the name . name != null
+     * @param representativeUrl String. Variable that contains the representativeUrl . representativeUrl != null
+     * @param userType int. Variable that contains the userType . userType != null
+     * @return a boolean if the user was registered or not
+     */
     public boolean registerUser(String nickname, String id, String name, String representativeUrl, int userType) {
         switch (userType) {
             case 1:
@@ -30,6 +43,22 @@ public class Controller implements Ads{
         return false;
     }
 
+    /**
+     * <b>Name:registerAudioContent</b><br>
+     * This method allows you to register a user.
+     * <b>Pre:</b>The AudioContent doesn't exist previously<br>
+     * <b>Post:</b>register method was operated correctly<br>
+     * @param user int. Variable containing the int you want to register. user != null
+     * @param title String. Variable that contains the title . title != null
+     * @param hour int. Variable that contains the hour . hour != null
+     * @param minute int. Variable that contains the minute . minute != null
+     * @param second int. Variable that contains the second . second != null
+     * @param album_description String. Variable that contains the album_description . album_description != null
+     * @param genre_category int. Variable that contains the genre_category . genre_category != null
+     * @param pictureUrl String. Variable that contains the pictureUrl . pictureUrl != null
+     * @param price double. Variable that contains the price . price != null
+     * @return a boolean if the audio content was registered or not
+     */
     public boolean registerAudioContent(int user, String title, int hour, int minute, int second, String album_description, int genre_category, String pictureUrl, double price) {
         if (users.get(user) instanceof Artist)
             return ((Artist) users.get(user)).addSong(new Song(title, new ChronologicalFormat(hour, minute, second), album_description, genre_category, pictureUrl, price));
@@ -38,6 +67,14 @@ public class Controller implements Ads{
         return false;
     }
 
+    /**
+     * <b>Name:searchAudioContent</b><br>
+     * This method allows you to searchAudioContent.
+     * <b>Pre:</b>The audio content should previously exist<br>
+     * <b>Post:</b>searchAudioContent method was operated correctly<br>
+     * @param title String. Variable containing the String you want to find. title != null
+     * @return an AudioContent with the audio content found
+     */
     public AudioContent searchAudioContent(String title) {
         AudioContent audioContent = null;
         for (int i = 0; i < users.size(); i++) {
@@ -59,6 +96,15 @@ public class Controller implements Ads{
         return audioContent;
     }
 
+    /**
+     * <b>Name:createPlaylist</b><br>
+     * This method allows you to createPlaylist.
+     * <b>Pre:</b>The playlist should not previously exist<br>
+     * <b>Post:</b>createPlaylist method was operated correctly<br>
+     * @param user int. Variable containing the integer you want to create. user != null
+     * @param playlistTitle String. Variable containing the String you want to create. playlistTitle != null
+     * @return a String with the playlist created.
+     */
     public String createPlaylist(int user, String playlistTitle) {
         if (users.get(user) instanceof Consumer) {
             if (((Consumer) users.get(user)).create(playlistTitle)) return "Successful";
@@ -67,16 +113,43 @@ public class Controller implements Ads{
         return "Invalid user";
     }
 
+     /**
+     * <b>Name:showPlaylist</b><br>
+     * This method allows you to show a playlist.
+     * <b>Pre:</b>The playlist should previously exist<br>
+     * <b>Post:</b>showPlaylist method was operated correctly<br>
+     * @param user int. Variable containing the integer to locate the user.  user != null
+     * @return a String with the shown playlist.
+     */
     public String showPlaylist(int user) {
         if (users.get(user) instanceof Consumer) return ((Consumer) users.get(user)).showPlaylists();
         return "Invalid user";
     }
 
+    /**
+     * <b>Name:showPlaylist</b><br>
+     * This method allows you to show a playlist.
+     * <b>Pre:</b>The playlist should previously exist<br>
+     * <b>Post:</b>showPlaylist method was operated correctly<br>
+     * @param user int. Variable containing the integer to locate the user.  user != null
+     * @param playlist int. Variable containing the integer to locate the playlist.  playlist != null
+     * @return a String with the shown playlist.
+     */
     public String showPlaylist(int user, int playlist) {
         if (users.get(user) instanceof Consumer) return ((Consumer) users.get(user)).showPlaylist(playlist);
         return "Invalid user";
     }
 
+     /**
+     * <b>Name:editPlaylist</b><br>
+     * This method allows you to edit a playlist.
+     * <b>Pre:</b>The playlist should previously exist<br>
+     * <b>Post:</b>editPlaylist method was operated correctly<br>
+     * @param user int. Variable containing the integer to locate the user.  user != null
+     * @param playlist int. Variable containing the integer to locate the playlist.  playlist != null
+     * @param title String. Variable containing the String to locate the title.  title != null
+     * @return a String with the edited playlist.
+     */
     public String editPlaylist(int user, int playlist, String title) {
         if (users.get(user) instanceof Consumer) {
             if (searchAudioContent(title) != null) {
@@ -84,11 +157,21 @@ public class Controller implements Ads{
                     return "Successful";
                 else return "Error in adding";
             }
-            return "Don't found the song title";
+            return "Didn't find the song title";
         }
         return "Invalid user";
     }
 
+    /**
+     * <b>Name:editPlaylist</b><br>
+     * This method allows you to edit a playlist.
+     * <b>Pre:</b>The playlist should previously exist<br>
+     * <b>Post:</b>editPlaylist method was operated correctly<br>
+     * @param user int. Variable containing the integer to locate the user.  user != null
+     * @param playlist int. Variable containing the integer to locate the playlist.  playlist != null
+     * @param audioContent int. Variable containing the Integer to locate the audioContent.  audioContent != null
+     * @return a String with the edited playlist.
+     */
     public String editPlaylist(int user, int playlist, int audioContent) {
         if (users.get(user) instanceof Consumer) {
             if (((Consumer) users.get(user)).removeAudioContentToPlaylist(playlist, audioContent)) return "Successful";
@@ -97,11 +180,30 @@ public class Controller implements Ads{
         return "Invalid user";
     }
 
+    /**
+     * <b>Name:sharePlaylist</b><br>
+     * This method allows you to share a playlist.
+     * <b>Pre:</b>The playlist should previously exist<br>
+     * <b>Post:</b>sharePlaylist method was operated correctly<br>
+     * @param user int. Variable containing the integer to locate the user.  user != null
+     * @param playlist int. Variable containing the integer to locate the playlist.  playlist != null
+     * @return a String with the shared playlist.
+     */
     public String sharePlaylist(int user, int playlist) {
         if (users.get(user) instanceof Consumer) return ((Consumer) users.get(user)).sharePlaylist(playlist);
         return "Invalid user";
     }
 
+    /**
+     * <b>Name:playbackPlaylist</b><br>
+     * This method allows you to playback a playlist.
+     * <b>Pre:</b>The playlist should previously exist<br>
+     * <b>Post:</b>playbackPlaylist method was operated correctly<br>
+     * @param user int. Variable containing the Integer to locate the user.  user != null
+     * @param playlist int. Variable containing the Integer to locate the playlist.  playlist != null
+     * @param action int. Variable containing the Integer to execute the action.  action != null
+     * @return a String with the shared playlist.
+     */
     public String playbackPlaylist(int user, int playlist, int action) {
         if (users.get(user) instanceof Consumer) {
             if (action == 3 || action == 4) updateCounterListenProducer(user, playlist, action);
@@ -113,6 +215,12 @@ public class Controller implements Ads{
         return "Invalid user";
     }
 
+    /**
+     * <b>Name:showAds</b><br>
+     * This method allows you to show ads.
+     * <b>Post:</b>showAds method was operated correctly<br>
+     * @return a String with the shown ads.
+     */
     private String showAds() {
         switch (rd.nextInt(3)) {
             case 0: return ad1;
@@ -122,33 +230,58 @@ public class Controller implements Ads{
         return "";
     }
 
+    /**
+     * <b>Name:updateCounterListenProducer</b><br>
+     * This method allows you to update counter for times you listen to Producer.
+     * <b>Pre:</b>The playlist should previously exist<br>
+     * <b>Post:</b>updateCounterListenProducer method was operated correctly<br>
+     * @param user int. Variable containing the Integer to locate the user.  user != null
+     * @param playlist int. Variable containing the Integer to locate the playlist.  playlist != null
+     * @param action int. Variable containing the Integer to execute the action.  action != null
+     */
     private void updateCounterListenProducer(int user, int playlist, int action) {
         if (users.get(user) instanceof Standard) {
             if (Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split(":")[1]) > 1) {
                 if (action == 3) {
                     if (Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) > 0) {
-                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1) instanceof Song)
+                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1) instanceof Song) {
+                            Objects.requireNonNull(searchArtist(((Song) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1)))).updateCounter(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1));
                             ((Standard) users.get(user)).updateCounter(searchArtist(((Song) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1))), 1);
-                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1) instanceof Podcast)
+                        }
+                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1) instanceof Podcast) {
+                            Objects.requireNonNull(searchContentCreator(((Podcast) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1)))).updateCounter(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1));
                             ((Standard) users.get(user)).updateCounter(searchContentCreator(((Podcast) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1))), 1);
+                        }
                     } else {
-                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1) instanceof Song)
+                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1) instanceof Song) {
+                            Objects.requireNonNull(searchArtist(((Song) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1)))).updateCounter(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1));
                             ((Standard) users.get(user)).updateCounter(searchArtist(((Song) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1))), 1);
-                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1) instanceof Podcast)
+                        }
+                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1) instanceof Podcast) {
+                            Objects.requireNonNull(searchContentCreator(((Podcast) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1)))).updateCounter(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1));
                             ((Standard) users.get(user)).updateCounter(searchContentCreator(((Podcast) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1))), 1);
+                        }
                     }
                 }
                 if (action == 4) {
                     if (Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) < ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().size() - 1) {
-                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) + 1) instanceof Song)
+                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) + 1) instanceof Song) {
+                            Objects.requireNonNull(searchArtist(((Song) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) + 1)))).updateCounter(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) + 1));
                             ((Standard) users.get(user)).updateCounter(searchArtist(((Song) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1))), 1);
-                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) + 1) instanceof Podcast)
+                        }
+                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) + 1) instanceof Podcast) {
+                            Objects.requireNonNull(searchContentCreator(((Podcast) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) + 1)))).updateCounter(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) + 1));
                             ((Standard) users.get(user)).updateCounter(searchContentCreator(((Podcast) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(Integer.parseInt(((Standard) users.get(user)).getPlaylists()[playlist].getLastContent().split("-")[0]) - 1))), 1);
+                        }
                     } else {
-                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0) instanceof Song)
+                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0) instanceof Song) {
+                            Objects.requireNonNull(searchArtist(((Song) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0)))).updateCounter(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0));
                             ((Standard) users.get(user)).updateCounter(searchArtist(((Song) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0))), 1);
-                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0) instanceof Podcast)
+                        }
+                        if (((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0) instanceof Podcast) {
+                            Objects.requireNonNull(searchContentCreator(((Podcast) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0)))).updateCounter(((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0));
                             ((Standard) users.get(user)).updateCounter(searchContentCreator(((Podcast) ((Standard) users.get(user)).getPlaylists()[playlist].getAudioContentList().get(0))), 1);
+                        }
                     }
                 }
             }
@@ -157,34 +290,58 @@ public class Controller implements Ads{
             if (Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split(":")[1]) > 1) {
                 if (action == 3) {
                     if (Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) > 0) {
-                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1) instanceof Song)
+                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1) instanceof Song) {
+                            Objects.requireNonNull(searchArtist(((Song) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1)))).updateCounter(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1));
                             ((Premium) users.get(user)).updateCounter(searchArtist(((Song) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1))), 1);
-                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1) instanceof Podcast)
+                        }
+                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1) instanceof Podcast) {
+                            Objects.requireNonNull(searchContentCreator(((Podcast) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1)))).updateCounter(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1));
                             ((Premium) users.get(user)).updateCounter(searchContentCreator(((Podcast) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1))), 1);
+                        }
                     } else {
-                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1) instanceof Song)
+                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1) instanceof Song) {
+                            Objects.requireNonNull(searchArtist(((Song) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1)))).updateCounter(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1));
                             ((Premium) users.get(user)).updateCounter(searchArtist(((Song) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1))), 1);
-                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1) instanceof Podcast)
+                        }
+                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1) instanceof Podcast) {
+                            Objects.requireNonNull(searchContentCreator(((Podcast) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1)))).updateCounter(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1));
                             ((Premium) users.get(user)).updateCounter(searchContentCreator(((Podcast) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1))), 1);
+                        }
                     }
                 }
                 if (action == 4) {
                     if (Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) < ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().size() - 1) {
-                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) + 1) instanceof Song)
+                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) + 1) instanceof Song) {
+                            Objects.requireNonNull(searchArtist(((Song) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) + 1)))).updateCounter(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) + 1));
                             ((Premium) users.get(user)).updateCounter(searchArtist(((Song) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1))), 1);
-                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) + 1) instanceof Podcast)
+                        }
+                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) + 1) instanceof Podcast) {
+                            Objects.requireNonNull(searchContentCreator(((Podcast) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) + 1)))).updateCounter(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) + 1));
                             ((Premium) users.get(user)).updateCounter(searchContentCreator(((Podcast) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(Integer.parseInt(((Premium) users.get(user)).getPlaylists().get(playlist).getLastContent().split("-")[0]) - 1))), 1);
+                        }
                     } else {
-                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0) instanceof Song)
+                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0) instanceof Song) {
+                            Objects.requireNonNull(searchArtist(((Song) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0)))).updateCounter(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0));
                             ((Premium) users.get(user)).updateCounter(searchArtist(((Song) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0))), 1);
-                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0) instanceof Podcast)
+                        }
+                        if (((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0) instanceof Podcast) {
+                            Objects.requireNonNull(searchContentCreator(((Podcast) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0)))).updateCounter(((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0));
                             ((Premium) users.get(user)).updateCounter(searchContentCreator(((Podcast) ((Premium) users.get(user)).getPlaylists().get(playlist).getAudioContentList().get(0))), 1);
+                        }
                     }
                 }
             }
         }
     }
 
+    /**
+     * <b>Name:searchContentCreator</b><br>
+     * This method allows you to search for a content creator.
+     * <b>Pre:</b>The content creator should previously exist<br>
+     * <b>Post:</b>searchContentCreator method was operated correctly<br>
+     * @param podcast Podcast. Variable containing the Podcast to locate the content creator.  podcast != null
+     * @return a ContentCreator in a position.
+     */
     private ContentCreator searchContentCreator(Podcast podcast) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i) instanceof ContentCreator) {
@@ -197,6 +354,14 @@ public class Controller implements Ads{
         return null;
     }
 
+    /**
+     * <b>Name:searchArtist</b><br>
+     * This method allows you to search for an artist creator.
+     * <b>Pre:</b>The artist should previously exist<br>
+     * <b>Post:</b>searchArtist method was operated correctly<br>
+     * @param song Song. Variable containing the Podcast to locate the content creator.  podcast != null
+     * @return an Artist in a position.
+     */
     private Artist searchArtist(Song song) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i) instanceof Artist) {
@@ -208,7 +373,15 @@ public class Controller implements Ads{
         return null;
     }
 
-
+     /**
+     * <b>Name:buySong</b><br>
+     * This method allows you to buy a song.
+     * <b>Pre:</b>The song should previously exist<br>
+     * <b>Post:</b>buySong method was operated correctly<br>
+     * @param user int. Variable containing the Integer to locate the user.  user != null
+     * @param title String. Variable containing the song's title.  title != null
+     * @return a String with the purchase message.
+     */
     public String buySong(int user, String title) {
         if (users.get(user) instanceof Consumer) {
             if (searchAudioContent(title) != null) {
@@ -234,6 +407,13 @@ public class Controller implements Ads{
         return "Invalid user";
     }
 
+     /**
+     * <b>Name:totalSongPlays</b><br>
+     * This method allows you to display totalSongPlays.
+     * <b>Pre:</b>The song should previously exist<br>
+     * <b>Post:</b>totalSongPlays method was operated correctly<br>
+     * @return a String with the total played songs
+     */
     public String totalSongPlays() {
         int counter = 0;
         for (int i = 0; i < users.size(); i++) {
@@ -265,6 +445,13 @@ public class Controller implements Ads{
         return "The total song plays: " + counter;
     }
 
+    /**
+     * <b>Name:totalPodcastPlay</b><br>
+     * This method allows you to display totalPodcastPlay.
+     * <b>Pre:</b>The podcast should previously exist<br>
+     * <b>Post:</b>totalPodcastPlay method was operated correctly<br>
+     * @return a String with the total played podcasts.
+     */
     public String totalPodcastPlay() {
         int counter = 0;
         for (int i = 0; i < users.size(); i++) {
@@ -296,6 +483,13 @@ public class Controller implements Ads{
         return "The total podcast plays: " + counter;
     }
 
+    /**
+     * <b>Name:theMostListenGenre</b><br>
+     * This method allows you to display theMostListenGenre.
+     * <b>Pre:</b>The genres should previously exist<br>
+     * <b>Post:</b>theMostListenGenre method was operated correctly<br>
+     * @return a String with theMostListenGenre.
+     */
     public String theMostListenGenre(int indexUser) {
         Genre max = Genre.values()[0];
         if (users.get(indexUser) instanceof Consumer) {
@@ -308,6 +502,13 @@ public class Controller implements Ads{
         return "Invalid user";
     }
 
+    /**
+     * <b>Name:theMostListenGenre</b><br>
+     * This method allows you to display theMostListenGenre.
+     * <b>Pre:</b>The genres should previously exist<br>
+     * <b>Post:</b>theMostListenGenre method was operated correctly<br>
+     * @return a String with theMostListenGenre.
+     */
     public String theMostListenGenre() {
         HashMap<Genre,ChronologicalFormat> genres = new HashMap<>();
         Genre max = Genre.values()[0];
@@ -332,6 +533,14 @@ public class Controller implements Ads{
         return max.name();
     }
 
+    /**
+     * <b>Name:theMostListenCategory</b><br>
+     * This method allows you to display theMostListenCategory.
+     * <b>Pre:</b>The category should previously exist<br>
+     * <b>Post:</b>theMostListenCategory method was operated correctly<br>
+     * @param indexUser int. Variable containing the Integer to locate the user.   indexUser != null
+     * @return a String with theMostListenCategory.
+     */
     public String theMostListenCategory(int indexUser) {
         Category max = Category.values()[0];
         if (users.get(indexUser) instanceof Consumer) {
@@ -344,6 +553,13 @@ public class Controller implements Ads{
         return "Invalid user";
     }
 
+    /**
+     * <b>Name:theMostListenCategory</b><br>
+     * This method allows you to display theMostListenCategory.
+     * <b>Pre:</b>The category should previously exist<br>
+     * <b>Post:</b>theMostListenCategory method was operated correctly<br>
+     * @return a String with theMostListenCategory.
+     */
     public String theMostListenCategory() {
         HashMap<Category,ChronologicalFormat> categories = new HashMap<>();
         Category max = Category.values()[0];
@@ -364,7 +580,96 @@ public class Controller implements Ads{
             if (categories.get(max).toSeconds() < categories.get(Category.values()[i]).toSeconds())
                 max = Category.values()[i];
         }
-
         return max.name();
+    }
+
+    public String topFiveArtist() {
+        ArrayList<Producer> artists = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i) instanceof Artist) artists.add(((Artist) users.get(i)));
+        }
+        ArrayList<Producer> top = sortUsers(artists);
+        return showTopProducers(top);
+    }
+
+    public String topFiveContentCreators() {
+        ArrayList<Producer> contentCreators = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i) instanceof ContentCreator) contentCreators.add(((ContentCreator) users.get(i)));
+        }
+        ArrayList<Producer> top = sortUsers(contentCreators);
+        return showTopProducers(top);
+    }
+
+    private String showTopProducers(ArrayList<Producer> top) {
+        String message = "";
+        for (int i = 0; i < top.size() && i < 5; i++) {
+            message += "  (" + (i+1) + ")  " + top.get(i).getNickname() + " (" + top.get(i).getName() + ")   " + top.get(i).getTotalPlays() + " total plays\n";
+        }
+        return message;
+    }
+
+    private ArrayList<Producer> sortUsers(ArrayList<Producer> producers) {
+        Producer max;
+        for (int i = 0; i < producers.size()-1; i++) {
+            for (int j = i; j < producers.size()-1; j++) {
+                if (producers.get(i).getTotalPlays() < producers.get(j+1).getTotalPlays()) {
+                    max = producers.get(j+1);
+                    producers.set(j+1, producers.get(i));
+                    producers.set(i,max);
+                }
+            }
+        }
+        return producers;
+    }
+
+    public String topTenSongs() {
+        ArrayList<AudioContent> songs = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i) instanceof Artist) {
+                songs.add(((Artist) users.get(i)).getTheMostListenedSong());
+            }
+        }
+        ArrayList<AudioContent> top = sortAudioContent(songs);
+        return showTopAudioContent(top);
+    }
+
+    public String topTenPodcast() {
+        ArrayList<AudioContent> podcasts = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i) instanceof ContentCreator) {
+                podcasts.add(((ContentCreator) users.get(i)).getTheMostListenedPodcast());
+            }
+        }
+        ArrayList<AudioContent> top = sortAudioContent(podcasts);
+        return showTopAudioContent(top);
+    }
+
+    private String showTopAudioContent(ArrayList<AudioContent> top) {
+        String message = "";
+        for (int i = 0; i < top.size() && i < 10; i++) {
+            message += "  (" + (i+1) + ")  ";
+            if (top.get(i) instanceof Song) {
+                message += ((Song) top.get(i)).getObject() + "    plays: " + Objects.requireNonNull(searchArtist(((Song) top.get(i)))).getPlaybackNumberByAudioContent().get(top.get(i)) + "\n";
+            }
+            if (top.get(i) instanceof Podcast) {
+                message += ((Podcast) top.get(i)).getObject() + "    plays: " + Objects.requireNonNull(searchContentCreator(((Podcast) top.get(i)))).getPlaybackNumberByAudioContent().get(top.get(i)) + "\n";
+            }
+        }
+        return message;
+    }
+
+    private ArrayList<AudioContent> sortAudioContent(ArrayList<AudioContent> songs) {
+        AudioContent max;
+        for (int i = 0; i < songs.size()-1; i++) {
+            for (int j = i; j < songs.size()-1; j++) {
+                if (Objects.requireNonNull(searchArtist((Song) songs.get(i))).getPlaybackNumberByAudioContent().get(songs.get(i)) < Objects.requireNonNull(Objects.requireNonNull(searchArtist((Song) songs.get(j + 1))).getPlaybackNumberByAudioContent().get(songs.get(j+1)))) {
+                    max = songs.get(j+1);
+                    songs.set(j+1, songs.get(i));
+                    songs.set(i,max);
+                }
+            }
+        }
+        return songs;
     }
 }

@@ -5,23 +5,53 @@ import model.*;
 import java.util.Scanner;
 
 public class Manager {
-    Playlist pl;
-    Purchase pc;
-    User user;
-    ChronologicalFormat cf;
+    
+    //Relationship
+    Controller cl;
     Scanner sc;
 
+    //Builder
     public Manager() {
+        cl = new Controller();
         sc = new Scanner(System.in);
     }
-
+    
+    //Executable
     public static void main(String[] args) {
         Manager m = new Manager();
         System.out.println("Hello world!");
-        m.cf = new ChronologicalFormat(3,20,20);
-        System.out.println(m.cf.toSeconds());
+        do {
+            m.showMenu();
+        } while (m.operation());
+        System.out.println("Thanks for using app");
     }
 
+    private boolean operation() {
+    }
+    /**
+     * <b>Name:showMenu</b><br>
+     * This method allows you to show the menu.
+     * <b>Post:</b>the menu was operated correctly<br>
+     */
+    private void showMenu() {
+        System.out.println(
+                "Menu:\n"+
+                        "(1)  Register user\n"+
+                        "(2)  Register song o podcast\n"+
+                        "(3)  Create playlist\n"+
+                        "(4)  Edit playlist\n"+
+                        "(5)  Share playlist\n"+
+                        "(6)  Playback playlist\n"+
+                        "(7)  Buy song\n"+
+                        "(8)  Show total plays\n"+
+                        "(9)  Show genre or category most listen\n"+
+                        "(10) Top 5 artist or content creator\n"+
+                        "(11) Top 10 songs or podcast\n"+
+                        "(12) Show song sold by genre\n"+
+                        "(13) Show the best selling sold"
+        );
+    }
+/*
     public void play() {
         boolean stop = false;
         do {
@@ -55,4 +85,6 @@ public class Manager {
             }
         } while (!stop);
     }
+    
+ */
 }

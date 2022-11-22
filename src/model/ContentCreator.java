@@ -36,6 +36,20 @@ public class ContentCreator extends Producer{
         return "The list podcast:\n" + message;
     }
 
+    public AudioContent getTheMostListenedPodcast() {
+        AudioContent max = null;
+        for (int i = 0; i < podcasts.size(); i++) {
+            if (max == null) {
+                if (getPlaybackNumberByAudioContent().containsKey(podcasts.get(i))) max = podcasts.get(i);
+            } else {
+                if (getPlaybackNumberByAudioContent().containsKey(podcasts.get(i))) {
+                    if (getPlaybackNumberByAudioContent().get(max) < getPlaybackNumberByAudioContent().get(podcasts.get(i))) max = podcasts.get(i);
+                }
+            }
+        }
+        return max;
+    }
+
     //Setters and Getters
 
     public Podcast getPodcast(int index) {
