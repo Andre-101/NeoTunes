@@ -661,6 +661,7 @@ public class Controller implements Ads{
         ArrayList<Producer> top = sortUsers(artists);
         return showTopProducers(top);
     }
+
     /**
      * <b>Name:topFiveContentCreators</b><br>
      * This method allows you to display topFiveArtist.
@@ -677,6 +678,13 @@ public class Controller implements Ads{
         return showTopProducers(top);
     }
 
+    /**
+     * <b>Name:showTopProducers</b><br>
+     * This method allows you to show top producer.
+     * <b>Post:</b>The method was operated correctly<br>
+     * @param top ArrayList<Producer>. variable containing the list of producers. top != null
+     * @return a String with top producer.
+     */
     private String showTopProducers(ArrayList<Producer> top) {
         String message = "";
         for (int i = 0; i < top.size() && i < 5; i++) {
@@ -685,6 +693,13 @@ public class Controller implements Ads{
         return message;
     }
 
+     /**
+     * <b>Name:sortUsers</b><br>
+     * This method allows you to sortUsers.
+     * <b>Pre:</b>The producers should previously exist<br>
+     * <b>Post:</b>sortUsers method was operated correctly<br>
+     * @return an Array producers in order.
+     */
     private ArrayList<Producer> sortUsers(ArrayList<Producer> producers) {
         Producer max;
         for (int i = 0; i < producers.size()-1; i++) {
@@ -699,6 +714,12 @@ public class Controller implements Ads{
         return producers;
     }
 
+    /**
+     * <b>Name:topTenSongs</b><br>
+     * This method allows you to sortUsers.
+     * <b>Post:</b>topTenSongs method was operated correctly<br>
+     * @return a String with the top audio content.
+     */
     public String topTenSongs() {
         ArrayList<AudioContent> songs = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
@@ -710,6 +731,12 @@ public class Controller implements Ads{
         return showTopAudioContent(top);
     }
 
+    /**
+     * <b>Name:topTenPodcast</b><br>
+     * This method allows you to display topTenPodcast.
+     * <b>Post:</b>topTenPodcast method was operated correctly<br>
+     * @return a String with the top audio content.
+     */
     public String topTenPodcast() {
         ArrayList<AudioContent> podcasts = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
@@ -721,6 +748,13 @@ public class Controller implements Ads{
         return showTopAudioContent(top);
     }
 
+    /**
+     * <b>Name:showTopAudioContent</b><br>
+     * This method allows you to showTopAudioContent.
+     * <b>Post:</b>showTopAudioContent method was operated correctly<br>
+     * @param top ArrayList<AudioContent>. Variable containing the ArrayList you want to find in the method. top != null
+     * @return a String with the top audio content.
+     */
     private String showTopAudioContent(ArrayList<AudioContent> top) {
         String message = "";
         for (int i = 0; i < top.size() && i < 10; i++) {
@@ -735,17 +769,146 @@ public class Controller implements Ads{
         return message;
     }
 
-    private ArrayList<AudioContent> sortAudioContent(ArrayList<AudioContent> songs) {
+    /**
+     * <b>Name:sortAudioContent</b><br>
+     * This method allows you to sortAudioContent.
+     * <b>Post:</b>sortAudioContent method was operated correctly<br>
+     * @param audioContents ArrayList<AudioContent>. Variable containing the ArrayList you want to find in the method.                  *audioContents != null
+     * @return an ArrayList with the sorted audio content.
+     */
+    private ArrayList<AudioContent> sortAudioContent(ArrayList<AudioContent> audioContents) {
         AudioContent max;
-        for (int i = 0; i < songs.size()-1; i++) {
-            for (int j = i; j < songs.size()-1; j++) {
-                if (Objects.requireNonNull(searchArtist((Song) songs.get(i))).getPlaybackNumberByAudioContent().get(songs.get(i)) < Objects.requireNonNull(Objects.requireNonNull(searchArtist((Song) songs.get(j + 1))).getPlaybackNumberByAudioContent().get(songs.get(j+1)))) {
-                    max = songs.get(j+1);
-                    songs.set(j+1, songs.get(i));
-                    songs.set(i,max);
+        for (int i = 0; i < audioContents.size()-1; i++) {
+            for (int j = i; j < audioContents.size()-1; j++) {
+                if (Objects.requireNonNull(searchArtist((Song) audioContents.get(i))).getPlaybackNumberByAudioContent().get(audioContents.get(i)) < Objects.requireNonNull(Objects.requireNonNull(searchArtist((Song) audioContents.get(j + 1))).getPlaybackNumberByAudioContent().get(audioContents.get(j+1)))) {
+                    max = audioContents.get(j+1);
+                    audioContents.set(j+1, audioContents.get(i));
+                    audioContents.set(i,max);
                 }
             }
         }
-        return songs;
+        return audioContents;
+    }
+
+    /**
+     * <b>Name:showSolds</b><br>
+     * This method allows you to show the song's sales.
+     * <b>Post:</b>The method was operated correctly<br>
+     * @return a String with the song's sales.
+     */
+    public String showSolds() {
+        String message = "";
+        for (int i = 1; i < Genre.values().length; i++) {
+            message += "  Genre: " + Genre.values()[i].name() + "  \nnumber of sales: " + soldByGenre(Genre.values()[i])[0] + "  \ntotal sales: $" + soldByGenre(Genre.values()[i])[1] + "  \n";
+        }
+        return message;
+    }
+
+    /**
+     * <b>Name:soldByGenre</b><br>
+     * This method allows you to show the price.
+     * <b>Pre:</b>The genre must previously exist<br>
+     * <b>Post:</b>soldByGenre method was operated correctly<br>
+     * @param genre Genre. Variable containing the Genre you want to find the method. genre != null
+     * @return a double with amount of times the genre has been sold and the number of sales
+     */
+    public double[] soldByGenre(Genre genre) {
+        double[] number = new double[2];
+        number[0] = 0;
+        number[1] = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i) instanceof Standard) {
+                for (int j = 0; j < ((Standard) users.get(i)).getPurchases().length; j++) {
+                    if (((Standard) users.get(i)).getPurchases()[j].getSong().getGenre().equals(genre)) {
+                        number[0] += 1;
+                        number[1] += ((Standard) users.get(i)).getPurchases()[j].getSong().getPrice();
+                    }
+                }
+            }
+            if (users.get(i) instanceof Premium) {
+                for (int j = 0; j < ((Premium) users.get(i)).getPurchases().size(); j++) {
+                    if (((Premium) users.get(i)).getPurchases().get(j).getSong().getGenre().equals(genre)) {
+                        number[0] += 1;
+                        number[1] += ((Premium) users.get(i)).getPurchases().get(j).getSong().getPrice();
+                    }
+                }
+            }
+        }
+        return number;
+    }
+
+    /**
+     * <b>Name:bestSeller</b><br>
+     * This method allows you to show the bestSeller.
+     * <b>Post:</b>bestSeller method was operated correctly<br>
+     * @return a String with the best seller
+     */
+    public String bestSeller() {
+        ArrayList<AudioContent> max = new ArrayList<>();
+        ArrayList<Integer> numbers = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i) instanceof Standard) {
+                for (int j = 0; j < ((Standard) users.get(i)).getPurchases().length; j++) {
+                    if (max.contains(((Standard) users.get(i)).getPurchases()[j].getSong())) {
+                        numbers.set(searchPositionBuySong(max,((Standard) users.get(i)).getPurchases()[j].getSong()), numbers.get(searchPositionBuySong(max,((Standard) users.get(i)).getPurchases()[j].getSong())) + 1);
+                    } else {
+                        max.add(((Standard) users.get(i)).getPurchases()[j].getSong());
+                        numbers.add(1);
+                    }
+                }
+            }
+            if (users.get(i) instanceof Premium) {
+                for (int j = 0; j < ((Premium) users.get(i)).getPurchases().size(); j++) {
+                    if (max.contains(((Premium) users.get(i)).getPurchases().get(j).getSong())) {
+                        numbers.set(searchPositionBuySong(max,((Premium) users.get(i)).getPurchases().get(j).getSong()), numbers.get(searchPositionBuySong(max,((Premium) users.get(i)).getPurchases().get(j).getSong())) + 1);
+                    } else {
+                        max.add(((Premium) users.get(i)).getPurchases().get(j).getSong());
+                        numbers.add(1);
+                    }
+                }
+            }
+        }
+        return mostSold(max,numbers);
+    }
+    /**
+     * <b>Name:mostSold</b><br>
+     * This method allows you to show the price.
+     * <b>Pre:</b>The audio contents must exist<br>
+     * <b>Post:</b>mostSold method was operated correctly<br>
+     * @param audioContents ArrayList<AudioContent>. Variable containing the audio content you want to find the method. audioContents != null
+     * @return a String with the most sold audio content
+     */
+    private String mostSold(ArrayList<AudioContent> audioContents, ArrayList<Integer> numbers) {
+        AudioContent max = audioContents.get(0);
+        int numberMax = 0;
+        for (int i = 1; i < audioContents.size()-1; i++) {
+            for (int j = i; j < audioContents.size()-1; j++) {
+                if (numbers.get(i) < numbers.get(j+1)) {
+                    max = audioContents.get(j+1);
+                    numberMax = numbers.get(j+1);
+                    audioContents.set(j+1, audioContents.get(i));
+                    numbers.set(j+1, numbers.get(i));
+                    audioContents.set(i,max);
+                    numbers.set(i,numberMax);
+                }
+            }
+        }
+        if (max instanceof Song)
+            return "  Title: " + max.getTitle() + "  number of sales: " + numberMax + "Total sales: $" + (((Song) max).getPrice()*numberMax);
+        return "";
+    }
+    /**
+     * <b>Name:searchPositionBuySong</b><br>
+     * This method allows you to searchPositionBuySong.
+     * <b>Pre:</b>The audiio content should exist<br>
+     * <b>Post:</b>searchPositionBuySong method was operated correctly<br>
+     * @param max ArrayList<AudioContent>. Variable containing the ArrayList you want to find the method. max != null
+     * @return an Integer with the position of the song 
+     */
+    private int searchPositionBuySong(ArrayList<AudioContent> max, Song song) {
+        for (int i = 0; i < max.size(); i++) {
+            if (max.get(i).equals(song)) return i;
+        }
+        return -1;
     }
 }

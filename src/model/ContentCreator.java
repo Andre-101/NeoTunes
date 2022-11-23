@@ -14,7 +14,7 @@ public class ContentCreator extends Producer{
      /**
      * <b>Name:addPodcast</b><br>
      * This method allows you to add a podcast.
-     * <b>Pre:</b>The podcast doesn´t exist previously<br>
+     * <b>Pre:</b>The podcast doesn't exist previously<br>
      * <b>Post:</b>addPodcast method was operated correctly<br>
      * @param podcast Podcast. Variable containing the podcast that you want to add on the add method. podcast != null
      * @return a boolean if the podcast was added or not
@@ -36,6 +36,13 @@ public class ContentCreator extends Producer{
         return "The list podcast:\n" + message;
     }
 
+    /**
+     * <b>Name:getTheMostListenedPodcast</b><br>
+     * This method finds the most played podcast.
+     * <b>Pre:</b>The podcast exists<br>
+     * <b>Post:</b>the most listened to podcast has been found<br>
+     * @return a AudioContent containing the most listened to podcast
+     */
     public AudioContent getTheMostListenedPodcast() {
         AudioContent max = null;
         for (int i = 0; i < podcasts.size(); i++) {

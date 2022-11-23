@@ -20,6 +20,12 @@ public abstract class Producer extends User{
         playbackTimeByAudioContent = new HashMap<>();
     }
 
+    /**
+     * <b>Name:updateCounter</b><br>
+     * This method allows you to update the counter.
+     * <b>Post:</b>updateCounter function was operated correctly<br>
+     * @param audioContent AudioContent. Variable containing the audio content. audioContent != null
+     */
     public void updateCounter(AudioContent audioContent) {
         if (playbackNumberByAudioContent.containsKey(audioContent)) {
             playbackNumberByAudioContent.replace(audioContent, playbackNumberByAudioContent.get(audioContent),playbackNumberByAudioContent.get(audioContent)+1);

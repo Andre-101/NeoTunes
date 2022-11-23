@@ -57,14 +57,47 @@ public class Manager {
         return true;
     }
 
+    /**
+     * <b>Name:topFive</b><br>
+     * This method allows you to display best selling song
+     * <b>Post:</b>The method has display successfully executed<br>
+     */
+    private void showBestSeller() {
+        System.out.println(cl.bestSeller());
+    }
+
+    /**
+     * <b>Name:topFive</b><br>
+     * This method allows you to display the songs sold of each genre
+     * <b>Post:</b>The method has display successfully executed<br>
+     */
+    private void showSold() {
+        System.out.println(cl.showSolds());
+    }
+
+    /**
+     * <b>Name:topTen</b><br>
+     * This method allows you to display the topTen
+     * <b>Post:</b>The method has been successfully executed<br>
+     */
     private void topTen() {
         System.out.println("Top 10 songs:\n" + cl.topTenSongs() + "\nTop 10 Podcast\n" + cl.topTenPodcast());
     }
 
+    /**
+     * <b>Name:topFive</b><br>
+     * This method allows you to display the topFive
+     * <b>Post:</b>The method has display successfully executed<br>
+     */
     private void topFive() {
         System.out.println("Top 5 Artists:\n" + cl.topFiveArtist() + "\nTop 5 Content creators\n" + cl.topFiveContentCreators());
     }
 
+    /**
+     * <b>Name:showMostListen</b><br>
+     * This method allows you to display the most listened genre
+     * <b>Post:</b>The method has been successfully executed<br>
+     */
     private void showMostListen() {
         System.out.println(" (1) An user   (2) The whole platform");
         switch (validateInput(1,2)) {
@@ -81,12 +114,22 @@ public class Manager {
         }
     }
 
+    /**
+     * <b>Name:showPlays</b><br>
+     * This method allows you to display the plays
+     * <b>Post:</b>The method has been successfully executed<br>
+     */
     private void showPlays() {
         System.out.println(cl.totalSongPlays() + "\n" + cl.totalPodcastPlay());
     }
 
+    /**
+     * <b>Name:buySong</b><br>
+     * This method allows you to buy a song
+     * <b>Post:</b>The method has been successfully executed<br>
+     */
     private void buySong() {
-        String message = "";
+        String message;
         boolean loop = true;
         System.out.println("Type nickname");
         String nickName = sc.nextLine();
@@ -106,8 +149,12 @@ public class Manager {
         }  else System.out.println("Didn't find the user");
     }
 
+    /**
+     * <b>Name:playbackPlaylist</b><br>
+     * This method allows you to playbackPlaylist
+     * <b>Post:</b>The method has been successfully executed<br>
+     */
     private void playbackPlaylist() {
-        boolean foundPlaylist = false;
         System.out.println("Type nickname");
         String nickName = sc.nextLine();
         System.out.println("Type playlist title");
@@ -126,6 +173,14 @@ public class Manager {
         } else System.out.println("Didn't find the user");
     }
 
+    /**
+     * <b>Name:playback</b><br>
+     * This method allows you to playback.
+     * <b>Pre:</b>The nickname must previously exist<br>
+     * <b>Post:</b>playback method was operated correctly<br>
+     * @param nickName String. Variable containing the String you want to find the method. nickname != null
+     * @param title String. Variable that contains the String you want to locate. title != null
+     */
     private void playback(String nickName, String title) {
         int action = 1;
         do {
@@ -137,6 +192,11 @@ public class Manager {
         } while (action != 0);
     }
 
+    /**
+     * <b>Name:sharePlaylist</b><br>
+     * This method allows you to sharePlaylist.
+     * <b>Post:</b>sharePlaylist method was operated correctly<br>
+     */
     private void sharePlaylist() {
         System.out.println("Type nickname");
         String nickName = sc.nextLine();
@@ -156,6 +216,11 @@ public class Manager {
         } else System.out.println("Didn't find the user");
     }
 
+    /**
+     * <b>Name:editPlaylist</b><br>
+     * This method allows you to editPlaylist.
+     * <b>Post:</b>editPlaylist method was operated correctly<br>
+     */
     private void editPlaylist() {
         boolean found = false;
         System.out.println("Type nickname");
@@ -183,6 +248,14 @@ public class Manager {
         } else System.out.println("Didn't find the user");
     }
 
+   /**
+     * <b>Name:removeAudioContentPlaylist</b><br>
+     * This method allows you to remove Audio Content Playlist.
+     * <b>Pre:</b>The nickname must previously exist<br>
+     * <b>Post:</b>removeAudioContentPlaylist method was operated correctly<br>
+     * @param nickName String. Variable containing the String you want to find the method. nickname != null
+     * @param title String. Variable that contains the String you want to locate. title != null
+     */
     private void removeAudioContentPlaylist(String nickName, String title) {
         String message = "";
         int size = 0;
@@ -198,12 +271,25 @@ public class Manager {
         cl.editPlaylist(cl.searchUserPosition(nickName),cl.searchPlaylistPosition(nickName, title),validateInput(1,size));
     }
 
+    /**
+     * <b>Name:addAudioContentPlaylist</b><br>
+     * This method allows you to addAudioContentPlaylist.
+     * <b>Pre:</b>The nickname must previously exist<br>
+     * <b>Post:</b>addAudioContentPlaylist method was operated correctly<br>
+     * @param nickname String. Variable containing the String you want to find the method. nickname != null
+     * @param title String. Variable that contains the String you want to locate. title != null
+     */
     private void addAudioContentPlaylist(String nickname, String title) {
         System.out.println("Type title song or podcast");
         String audioContent = sc.nextLine();
         System.out.println(cl.editPlaylist(cl.searchUserPosition(nickname), cl.searchPlaylistPosition(nickname, title), audioContent));
     }
 
+    /**
+     * <b>Name:createPlaylist</b><br>
+     * This method allows you to createPlaylist.
+     * <b>Post:</b>createPlaylist method was operated correctly<br>
+     */
     private void createPlaylist() {
         System.out.println("Type nickname");
         String nickName = sc.nextLine();
@@ -220,6 +306,11 @@ public class Manager {
         } else System.out.println("Didn't find the user");
     }
 
+    /**
+     * <b>Name:registerAudioContent</b><br>
+     * This method allows you to registerAudioContent.
+     * <b>Post:</b>createPlaylist method was operated correctly<br>
+     */
     private void registerAudioContent() {
         String title, duration, album_description = null, pictureUrl;
         int hour, minute, second, genre_category = 0;
@@ -261,6 +352,11 @@ public class Manager {
         } else System.out.println("Didn't find the user");
     }
 
+    /**
+     * <b>Name:registerUser</b><br>
+     * This method allows you to registerUser.
+     * <b>Post:</b>registerUser method was operated correctly<br>
+     */
     private void registerUser() {
         int typeUser;
         String message;

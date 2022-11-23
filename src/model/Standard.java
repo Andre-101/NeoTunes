@@ -138,6 +138,13 @@ public class Standard extends Consumer{
         return message;
     }
 
+    /**
+     * <b>Name:foundPlaylist</b><br>
+     * This method allows to know if a playlist exists.
+     * <b>Post:</b>The playlist was share correctly<br>
+     * @param title String. Variable containing the name of the playlist. title != null
+     * @return a boolean that informs about the existence of the playlist
+     */
     public boolean foundPlaylist(String title) {
         for (int i = 0; i < playlists.length; i++) {
             if (playlists[i].getTitle().equalsIgnoreCase(title)) return true;
