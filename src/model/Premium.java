@@ -134,6 +134,13 @@ public class Premium extends Consumer{
         return message;
     }
 
+    public boolean foundPlaylist(String title) {
+        for (int i = 0; i < playlists.size(); i++) {
+            if (playlists.get(i).getTitle().equalsIgnoreCase(title)) return true;
+        }
+        return false;
+    }
+
     /**
      * <b>Name:buy</b><br>
      * This method allows you to buy a song.

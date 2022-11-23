@@ -189,9 +189,8 @@ public class Controller implements Ads{
     public String editPlaylist(int user, int playlist, int audioContent) {
         if (users.get(user) instanceof Consumer) {
             if (((Consumer) users.get(user)).removeAudioContentToPlaylist(playlist, audioContent)) return "Successful";
-            else return "Error in the deletion";
         }
-        return "Invalid user";
+        return "Error in the deletion";
     }
 
     /**
@@ -227,6 +226,20 @@ public class Controller implements Ads{
             return ((Consumer) users.get(user)).playPlaylist(playlist, action);
         }
         return "Invalid user";
+    }
+
+    public int searchPlaylistPosition(String nickname, String title) {
+        if (searchUser(nickname) instanceof Standard) {
+            for (int i = 0; i < ((Standard) searchUser(nickname)).getPlaylists().length; i++) {
+                if (((Standard) searchUser(nickname)).getPlaylists()[i].getTitle().equalsIgnoreCase(title)) return i;
+            }
+        }
+        if (searchUser(nickname) instanceof Premium) {
+            for (int i = 0; i < ((Premium) searchUser(nickname)).getPlaylists().size(); i++) {
+                if (((Premium) searchUser(nickname)).getPlaylists().get(i).getTitle().equalsIgnoreCase(title)) return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -403,7 +416,7 @@ public class Controller implements Ads{
                     String message = buySimulate();
                     if (message.equals("")) {
                         if (((Consumer) users.get(user)).buy(((Song) searchAudioContent(title))))
-                            return "Successful purchase";
+                            return "";
                         else
                             return "Purchase was successful but you cannot buy more songs, the purchase money will be returned to you.";
                     } else return message;
@@ -517,7 +530,7 @@ public class Controller implements Ads{
                 if (((Consumer) users.get(indexUser)).getTimePlayedByGenre().get(max).toSeconds() < ((Consumer) users.get(indexUser)).getTimePlayedByGenre().get(Genre.values()[i]).toSeconds())
                     max = Genre.values()[i];
             }
-            return max.name();
+            return " Genre: " + max.name() + "   number of reproductions:" + getNumberPlaysGenre(max);
         }
         return "Invalid user";
     }
@@ -550,7 +563,22 @@ public class Controller implements Ads{
                 max = Genre.values()[i];
         }
 
-        return max.name();
+        return " Genre: " + max.name() + "   number of reproductions:" + getNumberPlaysGenre(max);
+    }
+
+    private int getNumberPlaysGenre(Genre max) {
+        int numberPlays = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i) instanceof Artist) {
+                for (int j = 0; j < ((Artist) users.get(i)).getSongs().size(); j++) {
+                    if (((Artist) users.get(i)).getSongs().get(j).getGenre().equals(max)) {
+                        if (((Artist) users.get(i)).getPlaybackNumberByAudioContent().containsKey(((Artist) users.get(i)).getSongs().get(j)))
+                            numberPlays += ((Artist) users.get(i)).getPlaybackNumberByAudioContent().get(((Artist) users.get(i)).getSongs().get(j));
+                    }
+                }
+            }
+        }
+        return numberPlays;
     }
 
     /**
@@ -568,7 +596,7 @@ public class Controller implements Ads{
                 if (((Consumer) users.get(indexUser)).getTimePlayedByCategory().get(max).toSeconds() < ((Consumer) users.get(indexUser)).getTimePlayedByCategory().get(Category.values()[i]).toSeconds())
                     max = Category.values()[i];
             }
-            return max.name();
+            return " Category: " + max.name() + "   number of reproductions:" + getNumberPlaysCategory(max);
         }
         return "Invalid user";
     }
@@ -600,8 +628,24 @@ public class Controller implements Ads{
             if (categories.get(max).toSeconds() < categories.get(Category.values()[i]).toSeconds())
                 max = Category.values()[i];
         }
-        return max.name();
+        return " Category: " + max.name() + "   number of reproductions:" + getNumberPlaysCategory(max);
     }
+
+    private int getNumberPlaysCategory(Category max) {
+        int numberPlays = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i) instanceof ContentCreator) {
+                for (int j = 0; j < ((ContentCreator) users.get(i)).getPodcasts().size(); j++) {
+                    if (((ContentCreator) users.get(i)).getPodcasts().get(j).getCategory().equals(max)) {
+                        if (((ContentCreator) users.get(i)).getPlaybackNumberByAudioContent().containsKey(((ContentCreator) users.get(i)).getPodcasts().get(j)))
+                            numberPlays += ((ContentCreator) users.get(i)).getPlaybackNumberByAudioContent().get(((ContentCreator) users.get(i)).getPodcasts().get(j));
+                    }
+                }
+            }
+        }
+        return numberPlays;
+    }
+
     /**
      * <b>Name:topFiveArtist</b><br>
      * This method allows you to display topFiveArtist.

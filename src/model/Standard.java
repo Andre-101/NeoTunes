@@ -138,6 +138,13 @@ public class Standard extends Consumer{
         return message;
     }
 
+    public boolean foundPlaylist(String title) {
+        for (int i = 0; i < playlists.length; i++) {
+            if (playlists[i].getTitle().equalsIgnoreCase(title)) return true;
+        }
+        return false;
+    }
+
     /**
      * <b>Name:buy</b><br>
      * This method allows you to buy a song.

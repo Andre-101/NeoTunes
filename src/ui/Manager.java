@@ -57,8 +57,151 @@ public class Manager {
         return true;
     }
 
+    private void topTen() {
+        System.out.println("Top 10 songs:\n" + cl.topTenSongs() + "\nTop 10 Podcast\n" + cl.topTenPodcast());
+    }
+
+    private void topFive() {
+        System.out.println("Top 5 Artists:\n" + cl.topFiveArtist() + "\nTop 5 Content creators\n" + cl.topFiveContentCreators());
+    }
+
+    private void showMostListen() {
+        System.out.println(" (1) An user   (2) The whole platform");
+        switch (validateInput(1,2)) {
+            case 1:
+                System.out.println("Type nickname");
+                String nickName = sc.nextLine();
+                if (cl.searchUser(nickName) != null) {
+                    System.out.println("The most listen genre:\n" + cl.theMostListenGenre(cl.searchUserPosition(nickName)) + "\nThe most listen category:\n" + cl.theMostListenCategory(cl.searchUserPosition(nickName)));
+                } else System.out.println("Didn't find the user");
+                break;
+            case 2:
+                System.out.println("The most listen genre:\n" + cl.theMostListenGenre() + "\nThe most listen category:\n" + cl.theMostListenCategory());
+
+        }
+    }
+
+    private void showPlays() {
+        System.out.println(cl.totalSongPlays() + "\n" + cl.totalPodcastPlay());
+    }
+
+    private void buySong() {
+        String message = "";
+        boolean loop = true;
+        System.out.println("Type nickname");
+        String nickName = sc.nextLine();
+        System.out.println("Type playlist title");
+        String title = sc.nextLine();
+        if (cl.searchUser(nickName) != null) {
+            do {
+                message = cl.buySong(cl.searchUserPosition(nickName), title);
+                if (message.equals("")) {
+                    System.out.println("Successful purchase");
+                    loop = false;
+                } else {
+                    System.out.println(message + "\n Do you want to try again?\n (1) Yes  (2) No");
+                    if (validateInput(1,2) == 2) loop = false;
+                }
+            } while(loop);
+        }  else System.out.println("Didn't find the user");
+    }
+
+    private void playbackPlaylist() {
+        boolean foundPlaylist = false;
+        System.out.println("Type nickname");
+        String nickName = sc.nextLine();
+        System.out.println("Type playlist title");
+        String title = sc.nextLine();
+        if (cl.searchUser(nickName) != null) {
+            if (cl.searchUser(nickName) instanceof Consumer) {
+                if (cl.searchUser(nickName) instanceof Standard)
+                    if (((Standard) cl.searchUser(nickName)).foundPlaylist(title)) {
+                        playback(nickName,title);
+                    } else System.out.println("Didn't find playlist");
+                if (cl.searchUser(nickName) instanceof Premium)
+                    if (((Premium) cl.searchUser(nickName)).foundPlaylist(title)) {
+                        playback(nickName,title);
+                    } else System.out.println("Didn't find playlist");
+            } else System.out.println("Invalid user, the user must be a consumer (Standard or Premium");
+        } else System.out.println("Didn't find the user");
+    }
+
+    private void playback(String nickName, String title) {
+        int action = 1;
+        do {
+            System.out.println(
+                    cl.playbackPlaylist(cl.searchUserPosition(nickName), cl.searchPlaylistPosition(nickName, title), action) + "\n" +
+                            "--(1) Play   (2) Pause  (3) Previous  (4) Next  (0) Exit--"
+            );
+            action = validateInput(0,4);
+        } while (action != 0);
+    }
+
+    private void sharePlaylist() {
+        System.out.println("Type nickname");
+        String nickName = sc.nextLine();
+        System.out.println("Type playlist title");
+        String title = sc.nextLine();
+        if (cl.searchUser(nickName) != null) {
+            if (cl.searchUser(nickName) instanceof Consumer) {
+                if (cl.searchUser(nickName) instanceof Standard)
+                    if (((Standard) cl.searchUser(nickName)).foundPlaylist(title)) {
+                        System.out.println(cl.sharePlaylist(cl.searchUserPosition(nickName),cl.searchPlaylistPosition(nickName,title)));
+                    } else System.out.println("Didn't find playlist");
+                if (cl.searchUser(nickName) instanceof Premium)
+                    if (((Premium) cl.searchUser(nickName)).foundPlaylist(title)) {
+                        System.out.println(cl.sharePlaylist(cl.searchUserPosition(nickName),cl.searchPlaylistPosition(nickName,title)));
+                    } else System.out.println("Didn't find playlist");
+            } else System.out.println("Invalid user, the user must be a consumer (Standard or Premium");
+        } else System.out.println("Didn't find the user");
+    }
+
     private void editPlaylist() {
-        System.out.println("");
+        boolean found = false;
+        System.out.println("Type nickname");
+        String nickName = sc.nextLine();
+        System.out.println("Type playlist title");
+        String title = sc.nextLine();
+        if (cl.searchUser(nickName) != null) {
+            if (cl.searchUser(nickName) instanceof Consumer) {
+                if (cl.searchUser(nickName) instanceof Standard)
+                    found = ((Standard) cl.searchUser(nickName)).foundPlaylist(title);
+                if (cl.searchUser(nickName) instanceof Premium)
+                    found = ((Premium) cl.searchUser(nickName)).foundPlaylist(title);
+                if (found) {
+                    System.out.println(
+                            "To edit a playlist\n"+
+                                    "(1) Add song or podcast\n"+
+                                    "(2) Remove song or podcast"
+                    );
+                    switch (validateInput(1,2)) {
+                        case 1: addAudioContentPlaylist(nickName, title);
+                        case 2: removeAudioContentPlaylist(nickName, title);
+                    }
+                } else System.out.println("Didn't find playlist");
+            } else System.out.println("Invalid user, the user must be a consumer (Standard or Premium");
+        } else System.out.println("Didn't find the user");
+    }
+
+    private void removeAudioContentPlaylist(String nickName, String title) {
+        String message = "";
+        int size = 0;
+        if (cl.searchUser(nickName) instanceof Standard) {
+            message = ((Standard) cl.searchUser(nickName)).showPlaylist(cl.searchPlaylistPosition(nickName, title));
+            size = ((Standard) cl.searchUser(nickName)).getPlaylists()[cl.searchPlaylistPosition(nickName, title)].getAudioContentList().size();
+        }
+        if (cl.searchUser(nickName) instanceof Premium) {
+            message = ((Premium) cl.searchUser(nickName)).sharePlaylist(cl.searchPlaylistPosition(nickName, title));
+            size = ((Premium) cl.searchUser(nickName)).getPlaylists().get(cl.searchPlaylistPosition(nickName, title)).getAudioContentList().size();
+        }
+        System.out.println("which one do you want to delete?\n"+message);
+        cl.editPlaylist(cl.searchUserPosition(nickName),cl.searchPlaylistPosition(nickName, title),validateInput(1,size));
+    }
+
+    private void addAudioContentPlaylist(String nickname, String title) {
+        System.out.println("Type title song or podcast");
+        String audioContent = sc.nextLine();
+        System.out.println(cl.editPlaylist(cl.searchUserPosition(nickname), cl.searchPlaylistPosition(nickname, title), audioContent));
     }
 
     private void createPlaylist() {
@@ -69,7 +212,8 @@ public class Manager {
                 System.out.println("Type playlist title");
                 String title = sc.nextLine();
                 if (cl.createPlaylist(cl.searchUserPosition(nickName), title).equals("")) {
-                    System.out.println("Create successful");
+                    System.out.println("Create successful\n Do you want to add a song or podcast? (1)Yes  (2)No");
+                    if (validateInput(1,2) == 1) addAudioContentPlaylist(nickName, title);
                 }
                 else System.out.println(cl.createPlaylist(cl.searchUserPosition(nickName), title));
             } else System.out.println("Invalid user, the user must be a consumer (Standard or Premium");
